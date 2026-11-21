@@ -1,0 +1,345 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Root color-scheme and design tokens with fallbacks and light-dark() */
+:root {
+  --brand-accent-light: #4f46e5;
+  --brand-accent-dark: #818cf8;
+  --surface-light: #f9fafb;
+  --surface-dark: #020617;
+  --surface-elevated-light: #ffffff;
+  --surface-elevated-dark: #0f172a;
+  --text-primary-light: #111827;
+  --text-primary-dark: #f1f5f9;
+  --border-subtle-light: #e5e7eb;
+  --border-subtle-dark: #1e293b;
+  --scrollbar-track-light: #f1f5f9;
+  --scrollbar-track-dark: #1e293b;
+  --scrollbar-thumb-light: #64748b;
+  --scrollbar-thumb-dark: #94a3b8;
+  --skeleton-base-light: #e5e7eb;
+  --skeleton-base-dark: #1e293b;
+  --skeleton-shine-light: #f3f4f6;
+  --skeleton-shine-dark: #334155;
+  --spinner-track-light: #e0e7ff;
+  --spinner-track-dark: #312e81;
+
+  --accent-color: var(--brand-accent-light);
+  --surface: var(--surface-light);
+  --surface-elevated: var(--surface-elevated-light);
+  --text-primary: var(--text-primary-light);
+  --border-subtle: var(--border-subtle-light);
+  --scrollbar-track: var(--scrollbar-track-light);
+  --scrollbar-thumb: var(--scrollbar-thumb-light);
+  --skeleton-base: var(--skeleton-base-light);
+  --skeleton-shine: var(--skeleton-shine-light);
+  --spinner-track: var(--spinner-track-light);
+
+  color-scheme: light dark;
+  accent-color: var(--accent-color);
+  color: var(--text-primary);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent-color: var(--brand-accent-dark);
+    --surface: var(--surface-dark);
+    --surface-elevated: var(--surface-elevated-dark);
+    --text-primary: var(--text-primary-dark);
+    --border-subtle: var(--border-subtle-dark);
+    --scrollbar-track: var(--scrollbar-track-dark);
+    --scrollbar-thumb: var(--scrollbar-thumb-dark);
+    --skeleton-base: var(--skeleton-base-dark);
+    --skeleton-shine: var(--skeleton-shine-dark);
+    --spinner-track: var(--spinner-track-dark);
+  }
+}
+
+:root:has(> head > meta[name="color-scheme"][content="dark"]),
+:root.dark {
+  color-scheme: dark;
+  --accent-color: var(--brand-accent-dark);
+  --surface: var(--surface-dark);
+  --surface-elevated: var(--surface-elevated-dark);
+  --text-primary: var(--text-primary-dark);
+  --border-subtle: var(--border-subtle-dark);
+  --scrollbar-track: var(--scrollbar-track-dark);
+  --scrollbar-thumb: var(--scrollbar-thumb-dark);
+  --skeleton-base: var(--skeleton-base-dark);
+  --skeleton-shine: var(--skeleton-shine-dark);
+  --spinner-track: var(--spinner-track-dark);
+}
+
+:root:has(> head > meta[name="color-scheme"][content="light"]),
+:root.light {
+  color-scheme: light;
+  --accent-color: var(--brand-accent-light);
+  --surface: var(--surface-light);
+  --surface-elevated: var(--surface-elevated-light);
+  --text-primary: var(--text-primary-light);
+  --border-subtle: var(--border-subtle-light);
+  --scrollbar-track: var(--scrollbar-track-light);
+  --scrollbar-thumb: var(--scrollbar-thumb-light);
+  --skeleton-base: var(--skeleton-base-light);
+  --skeleton-shine: var(--skeleton-shine-light);
+  --spinner-track: var(--spinner-track-light);
+}
+
+@supports (color: light-dark(white, black)) {
+  :root {
+    --accent-color: light-dark(var(--brand-accent-light), var(--brand-accent-dark));
+    --surface: light-dark(var(--surface-light), var(--surface-dark));
+    --surface-elevated: light-dark(var(--surface-elevated-light), var(--surface-elevated-dark));
+    --text-primary: light-dark(var(--text-primary-light), var(--text-primary-dark));
+    --border-subtle: light-dark(var(--border-subtle-light), var(--border-subtle-dark));
+    --scrollbar-track: light-dark(var(--scrollbar-track-light), var(--scrollbar-track-dark));
+    --scrollbar-thumb: light-dark(var(--scrollbar-thumb-light), var(--scrollbar-thumb-dark));
+    --skeleton-base: light-dark(var(--skeleton-base-light), var(--skeleton-base-dark));
+    --skeleton-shine: light-dark(var(--skeleton-shine-light), var(--skeleton-shine-dark));
+    --spinner-track: light-dark(var(--spinner-track-light), var(--spinner-track-dark));
+  }
+}
+
+/* Legacy fallback for WebKit/Blink browsers without standard scrollbar-color support */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 6px;
+  }
+}
+
+/* Component-specific dark surface (e.g., always-dark Login page) */
+.login-dark-surface {
+  color-scheme: dark;
+  color: #ffffff;
+  accent-color: var(--brand-accent-dark);
+}
+
+/* Visually hidden utility (accessible to screen readers, revealed on focus) */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Card hover animation & accessible surface components */
+@layer components {
+  .card {
+    @apply bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200/80 dark:border-slate-800 transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-md border-brand-200 dark:border-brand-500/40;
+    transform: translateY(-2px);
+  }
+
+  .card-static {
+    @apply bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200/80 dark:border-slate-800;
+  }
+
+  .btn-primary {
+    @apply bg-brand-600 hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-gray-700 dark:text-slate-200 border border-gray-300/70 dark:border-slate-600 font-medium py-2 px-4 rounded-lg transition-all duration-200 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all duration-200 bg-white dark:bg-slate-800/90 text-gray-900 dark:text-slate-100 placeholder-gray-400 dark:placeholder-slate-400;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-gray-700 dark:text-slate-300 mb-1;
+  }
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--spinner-track);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.spinner-lg {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--spinner-track);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* Skeleton loader */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Fade in animation for page transitions */
+.page-enter {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Pulse animation for blast button */
+@keyframes blastPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+  }
+}
+
+.blast-btn-pulse {
+  animation: blastPulse 2s ease-in-out infinite;
+}
+
+/* Collapsible sidebar container & accessible current-page indicator */
+.sidebar-shell {
+  container-type: inline-size;
+  transition: transform 0.25s ease, width 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-shell {
+    transition: none;
+  }
+}
+
+.sidebar-collapsed-only {
+  display: none;
+}
+
+.sidebar-nav-link[aria-current='page'] {
+  position: relative;
+}
+
+.sidebar-nav-link[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 1.5rem;
+  border-radius: 9999px;
+  background-color: var(--accent-color);
+}
+
+@media (forced-colors: active) {
+  .sidebar-nav-link[aria-current='page']::before {
+    background-color: Highlight;
+    outline: 1px solid Highlight;
+  }
+}
+
+@container (max-width: 140px) {
+  .sidebar-shell .sidebar-brand-row {
+    justify-content: center;
+    padding-inline: 0.5rem;
+  }
+
+  .sidebar-shell .sidebar-expanded-only {
+    display: none;
+  }
+
+  .sidebar-shell .sidebar-collapsed-only {
+    display: flex;
+  }
+
+  .sidebar-shell .sidebar-nav-link {
+    justify-content: center;
+    padding-inline: 0.5rem;
+    gap: 0;
+  }
+
+  .sidebar-shell .sidebar-item-label {
+    position: absolute;
+    clip-path: inset(50%);
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    white-space: nowrap;
+  }
+}
+
+/* Fallback for browsers without container size query support */
+@supports not (container-type: inline-size) {
+  @media (min-width: 1024px) {
+    .sidebar-shell.is-collapsed .sidebar-brand-row {
+      justify-content: center;
+      padding-inline: 0.5rem;
+    }
+
+    .sidebar-shell.is-collapsed .sidebar-expanded-only {
+      display: none;
+    }
+
+    .sidebar-shell.is-collapsed .sidebar-collapsed-only {
+      display: flex;
+    }
+
+    .sidebar-shell.is-collapsed .sidebar-nav-link {
+      justify-content: center;
+      padding-inline: 0.5rem;
+      gap: 0;
+    }
+
+    .sidebar-shell.is-collapsed .sidebar-item-label {
+      position: absolute;
+      clip-path: inset(50%);
+      overflow: hidden;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      border: 0;
+      white-space: nowrap;
+    }
+  }
+}

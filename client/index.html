@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      try {
+        var scheme = localStorage.getItem('color-scheme');
+        if (scheme === 'light' || scheme === 'dark') {
+          document.querySelector('meta[name="color-scheme"]').content = scheme;
+          document.documentElement.classList.toggle('dark', scheme === 'dark');
+          document.documentElement.classList.toggle('light', scheme === 'light');
+        }
+        var savedLang = localStorage.getItem('callblast_lang');
+        if (savedLang === 'tr' || savedLang === 'en' || savedLang === 'de') {
+          document.documentElement.lang = savedLang;
+        } else if (navigator.language) {
+          var navLang = navigator.language.toLowerCase();
+          if (navLang.startsWith('en')) document.documentElement.lang = 'en';
+          else if (navLang.startsWith('de')) document.documentElement.lang = 'de';
+        }
+      } catch (_) {}
+    </script>
+    <title>CallBlast - Toplu Arama Yönetim Paneli</title>
+  </head>
+  <body class="bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-slate-100 antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

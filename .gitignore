@@ -1,0 +1,33 @@
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Backups, archives & screenshots
+backup/
+*.zip
+*.tar.gz
+*.7z
+*.bak
+
+# Persistent runtime data & audio files
+data/
+audio/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.log
+
+# Dependencies & build artifacts
+node_modules/
+dist/
+build/
+.vite/
+
+# OS & editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

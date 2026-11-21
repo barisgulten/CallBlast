@@ -1,0 +1,59 @@
+services:
+  asterisk:
+    build:
+      context: ./asterisk
+      dockerfile: Dockerfile
+    container_name: callblast-asterisk
+    env_file:
+      - .env
+    ports:
+      - "5060:5060/udp"
+      - "5060:5060/tcp"
+      - "127.0.0.1:8088:8088/tcp"
+      - "10000-10050:10000-10050/udp"
+    volumes:
+      - audio-files:/var/lib/asterisk/sounds/callblast
+      - audio-files:/var/lib/asterisk/sounds/en/callblast
+      - audio-files:/var/spool/asterisk/sounds/callblast
+    networks:
+      - callblast-net
+    restart: unless-stopped
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: callblast-server
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      - asterisk
+    env_file:
+      - .env
+    volumes:
+      - audio-files:/app/audio
+      - db-data:/app/data
+    networks:
+      - callblast-net
+    restart: unless-stopped
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: callblast-client
+    ports:
+      - "8080:80"
+    depends_on:
+      - server
+    networks:
+      - callblast-net
+    restart: unless-stopped
+
+volumes:
+  audio-files:
+  db-data:
+
+networks:
+  callblast-net:
+    driver: bridge
